@@ -8,9 +8,9 @@ class SwipePlayer extends React.Component {
       index: 0 // 当前轮播第几个图片
     }
   }
- 
+
   // 点击播放下一张
-  _nextImg () {
+  _nextImg() {
     if (this.state.index === this.props.images.length - 1) {
       this.state.index = 0;
     } else {
@@ -21,36 +21,42 @@ class SwipePlayer extends React.Component {
     })
   }
 
-  play () {
+  play() {
     this.timerId = setInterval(() => {
       this._nextImg()
     }, 3000)
   }
- 
-  componentDidMount () {
+
+  componentDidMount() {
     this.play()
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.timerId)
   }
- 
-  render () {
+
+  render() {
     var { index } = this.state;
     return (
       <div className="wrap">
         <ul className="list">
           {
-            this.props.images.map((item, i) => (
-              <li className={`item ${i === index ? 'active' : ''}`} key={i}>
-                <img src={item} alt="" />
-              </li>
-            ))
+            this.props.images ? <>{
+              this.props.images.map((item, i) => (
+                <li className={`item ${i === index ? 'active' : ''}`} key={i}>
+                  <img src={item} alt="" />
+                </li>
+              ))
+            }
+            </> : <></>
+          }
+          {
+
           }
         </ul>
-        <Pagination num={this.props.images} index={index}/>
+        <Pagination num={this.props.images} index={index} />
       </div>
     )
   }
 }
- 
+
 export default SwipePlayer;

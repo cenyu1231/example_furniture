@@ -14,23 +14,40 @@ class My extends Component {
     state = {
         userStatus: false, //未登录
     }
+    componentDidMount(){
+        if(this.props.user.username && this.props.user.userid){
+            this.setState({
+                userStatus:true
+            })
+        }
+    }
 
     // 登录和退出
     loginAeixt = () => {
-        if (this.props.user) {
-            this.props.setUser('');
-            localStorage.removeItem('lg');
+        if (this.props.user.username && this.props.user.userid) {
+            this.props.setUser({});
+            localStorage.removeItem('userid');
+            localStorage.removeItem('username');
+            this.setState({
+                userStatus:false
+            })
             return;
         }
         this.props.history.push('/my/login');
     }
+
     render() {
         return (<div>
             {/* 头部 */}
             <div className='my-header'>
                 <span>安逸家具</span>
             </div>
-            <div className='my-user'>用户： {this.props.user}</div>
+            <div className='my-user'>
+                {
+                    this.props.user.username ? <>用户： {this.props.user.username}</>:<>请先登录</>
+                }
+                
+                </div>
 
             {/* 功能 */}
             <div className='my-func'>
@@ -74,7 +91,7 @@ class My extends Component {
             <div className='loginExit-btn'>
                 <span onClick={this.loginAeixt}>
                     {
-                        this.props.user ? <button className='button-exit'>退出登录</button> : <button className='button-login'>登录</button>
+                        this.state.userStatus ? <button className='button-exit'>退出登录</button> : <button className='button-login'>登录</button>
                     }
                 </span>
             </div>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { delCarItem, selAllCar } from '../../../api/api';
+import { addBuyCar, selAllCar } from '../../../api/api';
 import ComHeader from '../../../components/comHeader/comHeader';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -25,7 +25,8 @@ class Car extends Component {
     }
     // init
     init = () => {
-        selAllCar('/selAllCar', { username: this.props.user }).then(res => {
+        selAllCar('/selAllCar', { userid: this.props.user.userid }).then(res => {
+            // console.log(res)
             this.setState({
                 allCar: res.car,
             })
@@ -43,12 +44,12 @@ class Car extends Component {
             }
         }
         if (tem) {   // 原数组中没有这个商品的数据，新建一个
-            this.state.selector.push({ id: obj.id, count: obj.count, sumPrice:obj.price , price: obj.price })
+            this.state.selector.push({ id: obj.id, count: obj.count, sumPrice: obj.price, price: obj.price })
         }
         this.setState({
             selector: this.state.selector
         }, () => {
-            console.log(this.state.selector)
+            // console.log(this.state.selector)
             this.myTotal();  //每次修改完单个商品数组的数据之后重新计算总价
         });
     }
@@ -107,19 +108,19 @@ class Car extends Component {
 
     // 移出购物车
     removeCar = (ele) => {
-        delCarItem('/delCarItem', { username: ele.username, id: ele.id, title: ele.title }).then(res => {
+        addBuyCar('/addBuyCar', { userid: this.props.user.userid, goodsid: ele.id }).then(res => {
             this.init();
             this.selectorGoods({ selectImg: false, id: ele.id });  //移出购物车的同时也要重新计算
         })
     }
     // 去生成订单的页面
     toGoodsOrder = () => {
-        if(this.state.selectorGoodsCon.length <= 0 ){
+        if (this.state.selectorGoodsCon.length <= 0) {
             alert('未选择商品！');
-            return ;
+            return;
         }
         // 携值跳转
-        this.props.history.push('/my/orderdetails', {goods:this.state.selectorGoodsCon,AllNeedData:this.state.selector,totalPrice:this.state.totalPrice});
+        this.props.history.push('/my/orderdetails', { goods: this.state.selectorGoodsCon, AllNeedData: this.state.selector, totalPrice: this.state.totalPrice });
     }
 
     render() {
@@ -130,34 +131,38 @@ class Car extends Component {
                 {
                     this.props.user == '' ? ((<Link to='/my/login'>
                         <div
-                            style={{ width: "40%", textAlign: "center", "position": "absolute", left: "50%", marginLeft: "-20%", marginTop: "50%", color: "#3333ff", fontSize: "0.4rem" }}>
+                            style={{ width: "100%", textAlign: "center", marginTop: "3rem",  color: "#3333ff", fontSize: "0.4rem" }}>
                             未登录·点我
                         </div>
                     </Link>)) :
                         this.state.allCar.length == 0 ? (<div
-                            style={{ width: "40%", textAlign: "center", "position": "absolute", left: "50%", marginLeft: "-20%", marginTop: "50%", color: "#3333ff", fontSize: "0.4rem" }}>
+                            style={{ width: "100%", textAlign: "center", marginTop: "3rem",  color: "#3333ff", fontSize: "0.4rem" }}>
                             暂无购物车数据
                         </div>) : (<div>{
                             this.state.allCar.map(ele => (
                                 <div className="car-info" key={ele.id} >
                                     {/* 选择 */}
-                                    <div style={{ "width": "10%", "float": "left", textAlign: "center" }}>
-                                        <MySelector myId={ele.id} meth={this.selectorGoods} />
-                                    </div>
-                                    <div style={{ "width": "28%", "float": "left", textAlign: "center" }}>
-                                        <img src={ele.imgurl} alt={ele.title} />
-                                    </div>
-                                    <div style={{ "width": "52%", "float": "left" }}>
-                                        <div>
-                                            商品：{ele.title}   <br />
-                                            价格：{ele.price} ￥   <br />
+                                    <div style={{"display":"flex",height:"1.5rem"}}>
+                                        <div style={{ "flex": "1", textAlign: "center" }}>
+                                            <MySelector myId={ele.id} meth={this.selectorGoods} />
                                         </div>
-                                        <div>
-                                            <Count price={ele.price} sum={this.sum} id={ele.id} />
+                                        <Link to={{ pathname: '/goods/details/', state: { id: ele.id, city: ele.city } }} >
+                                            <div style={{ "flex": "2", textAlign: "center" }}>
+                                                <img src={ele.imgurl} alt={ele.title} />
+                                            </div>
+                                        </Link>
+                                        <div style={{ "flex": "8", "marginLeft": "10px" }}>
+                                            <div style={{ height:"1.1rem"}}>
+                                                商品：{ele.name}   <br />
+                                                价格：{ele.price} ￥   <br />
+                                            </div>
+                                            <div style={{ height:"0.3rem"}}>
+                                                <Count price={ele.price} sum={this.sum} id={ele.id} />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div style={{ "width": "10%", "float": "right" }}>
-                                        <button style={{ backgroundColor: "#ff2222", borderRadius: "3px" }} onClick={this.removeCar.bind(null, ele)}>—</button>
+                                        <div style={{ "flex": "1", lineHeight: "1.5rem",textAlign:"center" }}>
+                                            <span style={{ backgroundColor: "#ffaa00", borderRadius: "3px",padding:"0 8px" }} onClick={this.removeCar.bind(null, ele)}>-</span>
+                                        </div>
                                     </div>
                                 </div>
                             ))

@@ -3,30 +3,32 @@ import { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
 function SearchInput(props) {
-const [keyword,setKeyword] = useState('');
+const [name,setName] = useState('');
 useEffect(()=>{
     // 路由中有参数的话，赋值给新渲染的input
-    if(props.match.params.keyword){
-        setKeyword(props.match.params.keyword);
+    if(props.match.params.name){
+        setName(props.match.params.name);
     }else{
-        setKeyword('');  //保证没有传值有使用这个组件的组件不出错。
+        setName('');  //保证没有传值有使用这个组件的组件不出错。
     }
-},[props.match.params.keyword])
+},[props.match.params.name])
     function keyup(e) {
         // 回车键的编码十进制：13
         if(e.keyCode == 13){
-            if(keyword == null || keyword ==''){
+            if(name == null || name ==''){
                 return ;
             }
-            props.history.push('/searchpage/'+keyword);
+            props.history.push('/searchpage/'+name);
         } 
     }
     return (
         <input className='search-input' type="text"
         onKeyUp={keyup} 
-        value={keyword} 
-        onChange={(e)=> setKeyword(e.target.value)}
-        ref={props.myref} />
+        value={name} 
+        onChange={(e)=> setName(e.target.value)}
+        ref={props.myref} 
+        placeholder="必输入商品名,可模糊"
+        />
     )
 }
 

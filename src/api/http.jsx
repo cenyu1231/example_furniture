@@ -1,6 +1,7 @@
 // const qs = require('querystring'); //引入nodejs内置的模块，用来转化对象为以‘&’符号连接的参数。
 
-const base = '/api';
+// const base = '/api';
+const base = 'https://www.ccensx.ren:11443';
 
 // 自处理数据
 function  qs(data) {
@@ -14,8 +15,8 @@ function  qs(data) {
 }
 
 // 封装post
-const fetchPost=function(url,data){
-    return fetch(base+url,{
+const fetchPost= async function(url,data){
+    return await fetch(base+url,{
         method:'post',
         headers:{
             'Content-Type':'application/x-www-form-urlencoded'
@@ -25,11 +26,11 @@ const fetchPost=function(url,data){
 }
 
 // 封装get
-const fetchGet=function(url,data){
-    return fetch(base+url+'?'+qs(data)).then(res=>res.json());
+const fetchGet= async function(url,data){
+    return await fetch(base+url+'?'+qs(data)).then(res=>res.json());
 }
 
-module.exports = {
+export {
     fetchPost,
     fetchGet
 };

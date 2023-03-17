@@ -4,21 +4,24 @@ import { connect } from 'react-redux';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import { editUser, selUser } from "../../../api/api";
+import { bindActionCreators } from 'redux';
+import userAction from '../../../store/action/userAction';
 
 function BaseInfo(props) {
     const [username, setUsername] = useState('');
     const [age, setAge] = useState('');
-    const [addr, setAddr] = useState('');
+    const [sex, setSex] = useState('');
     const [tel, setTel] = useState('');
+    const [tishi, setTishi] = useState('');
     const [off, setOff] = useState(false)   //时候能修改，不能
 
     useEffect(() => {
-        selUser('/selUser', { username: props.user }).then(res => {
+        selUser('/selUser', { userid: props.user.userid }).then(res => {
             // console.log(res);
-            setUsername(res.user.username);
-            setAge(res.user.age);
-            setAddr(res.user.addr);
-            setTel(res.user.tel);
+            setUsername(res.user[0].username);
+            setAge(res.user[0].age);
+            setSex(res.user[0].sex);
+            setTel(res.user[0].tel);
         })
     }, [])
 
@@ -35,8 +38,8 @@ function BaseInfo(props) {
             case 'age':
                 setAge(value);
                 break;
-            case 'addr':
-                setAddr(value);
+            case 'sex':
+                setSex(value);
                 break;
             case 'tel':
                 setTel(value);
@@ -47,18 +50,21 @@ function BaseInfo(props) {
     }
 // 保存
 function save(){
-    editUser('/editUser',{username:username,age:age,addr:addr,tel:tel}).then(res=>{
-        console.log(res)
+    // console.log(username,age,tel,sex)
+    editUser('/editUser',{userid:props.user.userid,username:username,age:age,sex:sex,tel:tel}).then(res=>{
+        // console.log(res)
         if(res.code == 1){
             setOff(!off);
         }
+        setTishi(res.msg);
+        props.setUser({username,id:props.user.userid});
         
     })
 }
     function setClear() {
         setUsername('');
         setAge('');
-        setAddr('');
+        setSex('');
         setTel('');
     }
     return (<div id="baseInfo">
@@ -81,10 +87,10 @@ function save(){
                 value={age} 
                 style={{margin: "10px 0","fontWeight": "500"}}
                 /> <br />
-                地址：<input type="text" 
+                性别：<input type="text" 
                 disabled={off ? false : true} 
-                onChange={Change} name='addr' 
-                value={addr} 
+                onChange={Change} name='sex' 
+                value={sex} 
                 style={{margin: "10px 0","fontWeight": "500"}}
                 /> <br />
                 电话：<input type="text" 
@@ -92,7 +98,8 @@ function save(){
                 onChange={Change} name='tel' 
                 value={tel} 
                 style={{margin: "10px 0","fontWeight": "500"}}
-                /> <br />
+                /> <br /><br />
+                <div style={{"color":"red"}}>{tishi}</div>
                 <div style={{"marginTop": "50px"}}>
                     <button onClick={() => {
                         setOff(!off);
@@ -111,4 +118,4 @@ function save(){
     </div>)
 }
 
-export default connect((state) => (state))(BaseInfo);
+export default connect((state) => (state),(dispatch) => (bindActionCreators(userAction, dispatch)))(BaseInfo);

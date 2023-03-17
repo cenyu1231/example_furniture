@@ -11,7 +11,9 @@ function StarDeal(props) {
     return (<>
     {/* 就五个星星 */}
         {arr.map((ele1, idx) => (
-            <i className={idx < props.star ? 'iconfont icon-xingxing hong' : 'iconfont icon-xingxing'} key={idx} />
+            <i className={idx < props.star ? 'iconfont icon-xingxing hong' : 'iconfont icon-xingxing'} key={idx} 
+                onClick={props.getStar!=null ? props.getStar.bind(null,idx+1):null}
+            />
         ))}
     </>)
 }

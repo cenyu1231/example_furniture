@@ -14,6 +14,12 @@ function MyTabs(props) {
     // onclick
     function oncli(key) {
         setDfvk(key);
+        if(key == 2){
+            props.mychange(false)
+        }else{
+            props.mychange(true)
+        }
+        // console.log(key)
     }
     return (<div id="mytabs">
         <div className="mytabs-header">

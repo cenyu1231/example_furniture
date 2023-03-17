@@ -23,7 +23,7 @@ export default function LoadingMore(props) {
             // - 节流： 触发高频事件时一段时间内只执行一次。
             // - 防抖： 触发高频事件时一段时间内将多次执行变为最后一次执行。
             // 节流防抖之防抖(实现)
-            if (clientH + document.documentElement.scrollTop >= offsetTop) {
+            if (clientH + document.documentElement.scrollTop >= offsetTop-window.innerHeight/2) {
                 if (timer) {
                     clearTimeout(timer);
                 }
@@ -42,8 +42,7 @@ export default function LoadingMore(props) {
         };
     })
     return (<div
-        style={{ textAlign: "center", "height": "42px", "lineHeight": "42px", "margin": "10px 0 0 0", backgroundColor: "#5555ff",position:"relative","zIndex":"20" }}
+        style={{ textAlign: "center", "height": "42px", "lineHeight": "42px", "margin": "10px 0 0 0", opacity:"1",position:"relative","zIndex":"20" }}
         ref={myrefmore}>
-        加载更多
     </div>)
 }

@@ -18,7 +18,7 @@ class NavTabs extends Component {
             </div>
             <div>
                 <NavLink to='/my'>
-                    <i className='iconfont icon-wode'/><span>我的</span>
+                    <i className='iconfont icon-wode1'/><span>我的</span>
                 </NavLink>
             </div>   
         </div>);

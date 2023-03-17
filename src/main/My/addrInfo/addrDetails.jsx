@@ -11,13 +11,14 @@ const mystyle = {
 }
 
 function AddrDetails(props) {
+    const [userid, setUserid] = useState(0);
     const [username, setUsername] = useState('');
     const [province, setProvince] = useState('');
     const [city, setCity] = useState('');
     const [tel, setTel] = useState('');
     const [area, setArea] = useState('');
     const [detailsAddr, setDetailsAddr] = useState('');
-    const [addrid, setAddrid] = useState('');
+    const [addrid, setAddrid] = useState(0);
     const [tishi, setTishi] = useState(false);
     // console.log(props)
 
@@ -26,17 +27,30 @@ function AddrDetails(props) {
     }, [])
     // 
     function init() {
+        // console.log(props.location.state)
         if (props.location.state) {
+            setUserid(props.location.state.userid)
             setUsername(props.location.state.username)
-            setProvince(props.location.state.province)
-            setCity(props.location.state.city)
-            setTel(props.location.state.tel)
-            setArea(props.location.state.area)
-            setDetailsAddr(props.location.state.detailsAddr)
-            setAddrid(props.location.state.addrid)
+            if(props.location.state.province){
+                setProvince(props.location.state.province)
+            }
+            if(props.location.state.city){
+                setCity(props.location.state.city)
+            }
+            if(props.location.state.tel){
+                setTel(props.location.state.tel)
+            }
+            if(props.location.state.area){
+                setArea(props.location.state.area)
+            }
+            if(props.location.state.detailsAddr){
+                setDetailsAddr(props.location.state.detailsAddr)
+            }
+            if(props.location.state.addrid){
+                setAddrid(props.location.state.addrid)
+            }
             return;
         }
-        setUsername(props.user)
     }
 
     //input值变函数
@@ -71,31 +85,34 @@ function AddrDetails(props) {
     // 保存
     function save() {
         if (province == '' || city == '' || area == '' || tel == '' || detailsAddr == '') {
-            console.log("必要信息不能为空")
-            setTishi(true);
+            setTishi('必要信息不能为空');
             return;
         }
-        addAeditUserAddrs('/addAeditUserAddrs', { username, province, city, area, tel, detailsAddr, addrid }).then(res => {
-            // console.log(res)
-            setTimeout(() => {
-                window.history.back();
-            }, 1000)
+        addAeditUserAddrs('/addAeditUserAddrs', { username, province, city, area, tel, detailsAddr, addrid ,userid}).then(res => {
+            setTishi(res.msg);
+            // console.log(res.msg)
+            if(res.code == 2 || res.code == 1){  //新增、修改成功
+                setTimeout(() => {
+                    window.history.back();
+                }, 1000)
+            }
         })
     }
 
     // 删除
     function myDelAddr() {
-        delAddr('/delAddr', { username, province, city, area, tel, detailsAddr, addrid }).then(res => {
-            // console.log(res);
-            setTimeout(() => {
-                window.history.back();
-            }, 1000)
+        delAddr('/delAddr', {addrid,userid}).then(res => {
+            setTishi(res.msg);
+            if(res.code == 1){  //成功
+                setTimeout(() => {
+                    window.history.back();
+                }, 1000)
+            }
         })
     }
 
     // 清除数据
     function setClear() {
-        setUsername('');
         setProvince('');
         setCity('');
         setTel('');
@@ -148,13 +165,16 @@ function AddrDetails(props) {
                 value={tel}
                 style={{ margin: "10px 0", "fontWeight": "500" }}
             /> <br /> <br />
-            {
-                tishi ? <div style={{"color":"#ff0000"}}>必要信息不能为空</div> : <></>
-            }
+            <div style={{"color":"#ff0000"}}>
+                {tishi}
+            </div>
             <div style={{ "marginTop": "50px" }}>
                 <button onClick={save} style={{"marginRight":"10px"}}>保存</button>
                 <button onClick={setClear} style={{"marginRight":"10px"}}>重置</button>
-                <button onClick={myDelAddr} >删除</button>
+                {
+                    // 新增没有删除
+                    props.location.state.userid &&props.location.state.addrid ? <button onClick={myDelAddr} >删除</button> : <></>
+                }
             </div>
         </div>
     </div>)

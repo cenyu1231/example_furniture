@@ -2,29 +2,38 @@ import React, { Component } from 'react';
 import NavTabs from '../../components/footNav/navtabs';
 import Header from './com/header';
 import Recommend from './com/recommend';
-import { getFestRecommend ,getHotRecommend, getSwiper } from './../../api/api';
+import { getFestRecommend ,getHotRecommend, getSwiper,getMaxRecommend } from './../../api/api';
 import { connect } from 'react-redux';
 import SwipePlayer from '../../components/mySwiper/swipePlayer';
 
 class Home extends Component {
     state = {
-        hotRecomment: [],  //热门数据
-        festRecomment: [],  //精品数据
+        hotRecomment: [],  //热门数据16个
+        festRecomment: [],  //精品数据8个
+        maxRecomment: [],  //销量最大4个
         images:[]
     }
     componentDidMount() {
         let that = this;
-        getHotRecommend('/getHotRecommend', { city: this.props.city }).then(res => {
+        getMaxRecommend('/getMaxRecommend', { city: this.props.city }).then(res => {
+            // console.log(res)
             that.setState({
-                hotRecomment: res.list
+                maxRecomment: res
             })
         });
-         getFestRecommend('/getFestRecommend', { city: this.props.city }).then(res => {
+        getHotRecommend('/getHotRecommend', { city: this.props.city }).then(res => {
             that.setState({
-                festRecomment: res.list
+                hotRecomment: res
+            })
+        });
+        getFestRecommend('/getFestRecommend', { city: this.props.city }).then(res => {
+            // console.log(res)
+            that.setState({
+                festRecomment: res
             })
         });
         getSwiper('/getSwiper').then(res=>{
+            // console.log(res);
             that.setState({
                 images:res.imgList
             })
@@ -33,17 +42,22 @@ class Home extends Component {
     }
     render() {
         // console.log(this.state)
-        return (<div>
+        return (<div style={{"padding":"43px 0 80px 0"}}>
             {/* 头部 */}
             <Header city={this.props.city} />
             {/* 轮播图组件 */}
-            <div style={{"height":"3.2rem"}}>
-                <SwipePlayer images={this.state.images} />
+            <div style={{"height":"4.5rem"}}>
+            {
+                this.state.images ? <SwipePlayer images={this.state.images} />:<></>
+            }
             </div>
+            {/* 销量推荐 */}
+            <Recommend category="销量推荐" list={this.state.maxRecomment} />
             {/* 精品推荐 */}
             <Recommend category="精品推荐" list={this.state.festRecomment} />
             {/* 热门推荐 */}
             <Recommend category="热门推荐" list={this.state.hotRecomment} />
+            
             {/* 底部 */}
             <NavTabs />
         </div>);

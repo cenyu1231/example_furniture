@@ -18,9 +18,15 @@ if(city){
   store.dispatch(cityAction.setCity(city))
 }
 
-const lg = localStorage.getItem('lg');
-if(lg){
-  store.dispatch(userAction.setUser(lg))
+// 已经登录的刷新保证登陆状态的存在
+const userid = localStorage.getItem('userid');
+const username = localStorage.getItem('username');
+
+if(userid &&username){
+  store.dispatch(userAction.setUser({
+    id:userid,
+    username:username
+  }))
 }
 root.render(
   // <React.StrictMode>

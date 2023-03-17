@@ -1,0 +1,9 @@
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (1, '岑宇', '123', 1, 24, '13217427986', '男');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (2, 'cenyu', '123', 0, 2, '00000000000', '未知');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (3, '岑那你1', '123', 0, 2, '00000000000', '未知');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (4, '岑那你3', '123', 0, 2, '00000000000', '未知');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (5, '岑那你2', '1234', 0, 2, '00000000000', '未知');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (6, '岑那4', '1234', 0, 2, '00000000000', '未知');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (7, '岑那你5', '1111', 0, 2, '00000000000', '未知');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (8, '岑宇5', '123', 0, 24, '55555555555', '男');
+INSERT INTO `users` (`id`, `username`, `password`, `roleid`, `age`, `tel`, `sex`) VALUES (9, '岑宇7', '123', 0, 0, '00000000000', '未知');

@@ -15,24 +15,21 @@ function Searchpage(props) {
     const [page, setPage] = useState(1);
     // 商品列表
     const [list, setList] = useState([]);
-    const [keyword1, setKeyword1] = useState('');
 
     useEffect(() => {
         GetList();
-    }, [props.match.params.keyword])
+    }, [props.match.params.name])
 
     // 封装获取数据的方法，好下传为参数
-    function GetList(){
-        getGoodsList('/getGoodsList', { city: props.city, keyword: props.match.params.keyword, page: page }).then(res => {
+    async function GetList(){
+        await getGoodsList('/getGoodsList', { city: props.city, name: props.match.params.name, page: page }).then(res => {
             // console.log(res)
             // 关键字有变化就清空list再重新赋值
-            setPage(page+1);
-            if(keyword1 != props.match.params.keyword){
-                setList(res.list);
-                setKeyword1(props.match.params.keyword);
-                return ;
-            } 
-            setList([...list,...res.list]);
+            if(res.goods.length == 10){
+                setPage(page+1);
+            }
+            setList(res.goods);
+            setList([...res.goods,...list]);
         })
     }
 

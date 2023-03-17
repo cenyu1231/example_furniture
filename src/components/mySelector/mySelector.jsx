@@ -16,7 +16,7 @@ function MySelector(props) {
     function xuanzeFunc() {
         setSelectImg(!selectImg)
     }
-    return (<div onClick={xuanzeFunc} style={{ "width": "0.5rem", height: "0.5rem", margin: "50% auto", overflow: "hidden", backgroundColor: "#ffffff", borderRadius: "0.25rem" }}>
+    return (<div onClick={xuanzeFunc} style={{ margin: "0.5rem auto", overflow: "hidden", backgroundColor: "#ffffff", borderRadius: "0.25rem" }}>
         <img src={selectImg ? xuanze1 : xuanze} alt="勾选" style={{ "width": "0.5rem", height: "0.5rem" }} />
     </div>)
 }

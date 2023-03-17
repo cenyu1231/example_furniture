@@ -2,7 +2,7 @@
     margin: 15px 0;
     padding: 0 5px;
 
-    .recommend-list{
+    .recommend-list {
         margin: 10px 5px;
         border: 1px solid #a3a3a3;
         box-shadow: 5px 5px 5px #a3a3a3;
@@ -10,11 +10,15 @@
         padding: 10px 5px;
 
         ul {
-            display: flex;
+            clear: both;
+            overflow: hidden;
 
             li {
-                flex: 1;
+                width: 25%;
+                float: left;
+                margin: 10px 0 0 0;
                 text-align: center;
+                font-size: 0.1rem;
 
                 img {
                     width: 1.5rem;
@@ -23,9 +27,12 @@
                 }
 
                 div {
-                    margin-top: 5px;
-                    padding: 0 5px;
-                    font-size: 0.1rem;
+                    width: 90%;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    margin: 5px auto 0;
+                    text-align: center;
                 }
             }
         }
